@@ -50,7 +50,7 @@ public class MissionManager : MonoBehaviour
     {
         gameManager.AddXPToPlayer(rewardXP);
 
-        missions.RemoveAll(m => m.id == item.missionId);  // ✅ 동일하게 id 기준
+        missions.RemoveAll(m => m.id == item.missionId);
 
         Destroy(item.gameObject);
 

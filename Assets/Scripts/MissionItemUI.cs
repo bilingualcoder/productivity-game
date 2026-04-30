@@ -7,13 +7,15 @@ public class MissionItemUI : MonoBehaviour
     public TMP_Text missionNameText;
     public Button completeButton;
     public Button deleteButton;
-
+    
     private MissionManager missionManager;
-    private string missionName;
+    public string missionId;
+    public string missionName;
     private int rewardXP;
 
-    public void Setup(MissionManager manager, string name, int xp)
+    public void Setup(MissionManager manager, string id, string name, int xp)
     {
+        missionId = id;
         missionManager = manager;
         missionName = name;
         rewardXP = xp;

@@ -6,6 +6,7 @@ public class MissionManager : MonoBehaviour
 {
     public GameManager gameManager;
 
+    public GameObject missionPanel;
     public TMP_InputField missionInputField;
     public Transform missionListContent;
     public GameObject missionItemPrefab;
@@ -14,28 +15,71 @@ public class MissionManager : MonoBehaviour
 
     private List<MissionData> missions = new List<MissionData>();
 
+    private string currentBuildingId;
+
     private const string SAVE_KEY = "MISSION_SAVE_DATA";
 
     private void Start()
     {
         LoadMissions();
+
+        if (missionPanel != null)
+            missionPanel.SetActive(false);
+    }
+
+    public void OpenMissionPanel(string buildingId)
+    {
+        currentBuildingId = buildingId;
+
+        if (missionPanel != null)
+            missionPanel.SetActive(true);
+
+        RefreshMissionUI();
     }
 
     public void AddMission()
     {
+        if (string.IsNullOrEmpty(currentBuildingId))
+            return;
+
         string missionName = missionInputField.text.Trim();
 
         if (string.IsNullOrEmpty(missionName))
             return;
 
-        MissionData mission = new MissionData(missionName, defaultRewardXP);
-        missions.Add(mission);
+        MissionData mission = new MissionData(
+            missionName,
+            defaultRewardXP,
+            currentBuildingId
+        );
 
-        CreateMissionUI(mission);
+        missions.Add(mission);
 
         missionInputField.text = "";
 
         SaveMissions();
+        RefreshMissionUI();
+    }
+
+    private void RefreshMissionUI()
+    {
+        ClearMissionUI();
+
+        foreach (MissionData mission in missions)
+        {
+            if (mission.buildingId == currentBuildingId)
+            {
+                CreateMissionUI(mission);
+            }
+        }
+    }
+
+    private void ClearMissionUI()
+    {
+        foreach (Transform child in missionListContent)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     private void CreateMissionUI(MissionData mission)
@@ -52,18 +96,16 @@ public class MissionManager : MonoBehaviour
 
         missions.RemoveAll(m => m.id == item.missionId);
 
-        Destroy(item.gameObject);
-
         SaveMissions();
+        RefreshMissionUI();
     }
 
     public void DeleteMission(MissionItemUI item)
     {
         missions.RemoveAll(m => m.id == item.missionId);
 
-        Destroy(item.gameObject);
-
         SaveMissions();
+        RefreshMissionUI();
     }
 
     private void SaveMissions()
@@ -85,10 +127,15 @@ public class MissionManager : MonoBehaviour
         MissionSaveData saveData = JsonUtility.FromJson<MissionSaveData>(json);
 
         missions = saveData.missions;
+    }
 
-        foreach (MissionData mission in missions)
-        {
-            CreateMissionUI(mission);
-        }
+    public void CloseMissionPanel()
+    {
+        currentBuildingId = null;
+
+        if (missionPanel != null)
+            missionPanel.SetActive(false);
+
+        ClearMissionUI();
     }
 }

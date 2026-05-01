@@ -111,15 +111,17 @@ public class BuildingManager : MonoBehaviour
         return buildings.Find(b => b.id == buildingId);
     }
 
-    public void AddXPToBuilding(string buildingId, int xpAmount)
+    public bool AddXPToBuilding(string buildingId, int xpAmount)
     {
         BuildingData building = buildings.Find(b => b.id == buildingId);
 
         if (building == null)
         {
             Debug.LogWarning("Building not found: " + buildingId);
-            return;
+            return false;
         }
+
+        bool leveledUp = false;
 
         building.currentXP += xpAmount;
 
@@ -128,12 +130,15 @@ public class BuildingManager : MonoBehaviour
             building.currentXP -= building.xpToNextLevel;
             building.level++;
             building.xpToNextLevel += 50;
+            leveledUp = true;
 
             Debug.Log(building.name + " leveled up to Lv." + building.level);
         }
 
         RefreshBuildingVisual(building);
         SaveBuildings();
+
+        return leveledUp;
     }
 
     private void RefreshBuildingVisual(BuildingData data)

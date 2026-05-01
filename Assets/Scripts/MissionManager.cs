@@ -14,6 +14,7 @@ public class MissionManager : MonoBehaviour
 
     public TMP_Text buildingNameLevelText;
     public TMP_Text buildingXPText;
+    public TMP_Text levelUpMessageText;
 
     public int defaultRewardXP = 20;
 
@@ -40,6 +41,11 @@ public class MissionManager : MonoBehaviour
             missionPanel.SetActive(true);
         }
 
+        if (levelUpMessageText != null)
+        {
+            levelUpMessageText.text = "";
+        }
+
         RefreshBuildingInfoUI();
         RefreshMissionUI();
     }
@@ -51,6 +57,11 @@ public class MissionManager : MonoBehaviour
         if (missionPanel != null)
         {
             missionPanel.SetActive(false);
+        }
+
+        if (levelUpMessageText != null)
+        {
+            levelUpMessageText.text = "";
         }
 
         ClearMissionUI();
@@ -89,7 +100,21 @@ public class MissionManager : MonoBehaviour
 
         if (mission != null && buildingManager != null)
         {
-            buildingManager.AddXPToBuilding(mission.buildingId, rewardXP);
+            bool leveledUp = buildingManager.AddXPToBuilding(mission.buildingId, rewardXP);
+
+            if (levelUpMessageText != null)
+            {
+                if (leveledUp)
+                {
+                    BuildingData building = buildingManager.GetBuildingData(mission.buildingId);
+                    levelUpMessageText.text =
+                        building.name + " leveled up to Lv." + building.level + "!";
+                }
+                else
+                {
+                    levelUpMessageText.text = "";
+                }
+            }
         }
 
         missions.RemoveAll(m => m.id == item.missionId);

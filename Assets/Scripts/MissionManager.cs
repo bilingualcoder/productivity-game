@@ -5,11 +5,15 @@ using System.Collections.Generic;
 public class MissionManager : MonoBehaviour
 {
     public GameManager gameManager;
+    public BuildingManager buildingManager;
 
     public GameObject missionPanel;
     public TMP_InputField missionInputField;
     public Transform missionListContent;
     public GameObject missionItemPrefab;
+
+    public TMP_Text buildingNameLevelText;
+    public TMP_Text buildingXPText;
 
     public int defaultRewardXP = 20;
 
@@ -32,9 +36,25 @@ public class MissionManager : MonoBehaviour
         currentBuildingId = buildingId;
 
         if (missionPanel != null)
+        {
             missionPanel.SetActive(true);
+        }
 
+        RefreshBuildingInfoUI();
         RefreshMissionUI();
+    }
+
+    public void CloseMissionPanel()
+    {
+        currentBuildingId = null;
+
+        if (missionPanel != null)
+        {
+            missionPanel.SetActive(false);
+        }
+
+        ClearMissionUI();
+        RefreshBuildingInfoUI();
     }
 
     public void AddMission()
@@ -56,6 +76,33 @@ public class MissionManager : MonoBehaviour
         missions.Add(mission);
 
         missionInputField.text = "";
+
+        SaveMissions();
+        RefreshMissionUI();
+    }
+
+    public void CompleteMission(MissionItemUI item, int rewardXP)
+    {
+        gameManager.AddXPToPlayer(rewardXP);
+
+        MissionData mission = missions.Find(m => m.id == item.missionId);
+
+        if (mission != null && buildingManager != null)
+        {
+            buildingManager.AddXPToBuilding(mission.buildingId, rewardXP);
+        }
+
+        missions.RemoveAll(m => m.id == item.missionId);
+
+        SaveMissions();
+
+        RefreshBuildingInfoUI();
+        RefreshMissionUI();
+    }
+
+    public void DeleteMission(MissionItemUI item)
+    {
+        missions.RemoveAll(m => m.id == item.missionId);
 
         SaveMissions();
         RefreshMissionUI();
@@ -87,25 +134,52 @@ public class MissionManager : MonoBehaviour
         GameObject item = Instantiate(missionItemPrefab, missionListContent);
 
         MissionItemUI itemUI = item.GetComponent<MissionItemUI>();
+
+        if (itemUI == null)
+        {
+            Debug.LogError("MissionItemUI component is missing on missionItemPrefab.");
+            return;
+        }
+
         itemUI.Setup(this, mission.id, mission.title, mission.xpReward);
     }
 
-    public void CompleteMission(MissionItemUI item, int rewardXP)
+    private void RefreshBuildingInfoUI()
     {
-        gameManager.AddXPToPlayer(rewardXP);
+        if (buildingManager == null || string.IsNullOrEmpty(currentBuildingId))
+        {
+            if (buildingNameLevelText != null)
+                buildingNameLevelText.text = "";
 
-        missions.RemoveAll(m => m.id == item.missionId);
+            if (buildingXPText != null)
+                buildingXPText.text = "";
 
-        SaveMissions();
-        RefreshMissionUI();
-    }
+            return;
+        }
 
-    public void DeleteMission(MissionItemUI item)
-    {
-        missions.RemoveAll(m => m.id == item.missionId);
+        BuildingData building = buildingManager.GetBuildingData(currentBuildingId);
 
-        SaveMissions();
-        RefreshMissionUI();
+        if (building == null)
+        {
+            if (buildingNameLevelText != null)
+                buildingNameLevelText.text = "Unknown Building";
+
+            if (buildingXPText != null)
+                buildingXPText.text = "";
+
+            return;
+        }
+
+        if (buildingNameLevelText != null)
+        {
+            buildingNameLevelText.text = building.name + " Lv." + building.level;
+        }
+
+        if (buildingXPText != null)
+        {
+            buildingXPText.text =
+                "Building XP: " + building.currentXP + " / " + building.xpToNextLevel;
+        }
     }
 
     private void SaveMissions()
@@ -126,16 +200,9 @@ public class MissionManager : MonoBehaviour
         string json = PlayerPrefs.GetString(SAVE_KEY);
         MissionSaveData saveData = JsonUtility.FromJson<MissionSaveData>(json);
 
+        if (saveData == null || saveData.missions == null)
+            return;
+
         missions = saveData.missions;
-    }
-
-    public void CloseMissionPanel()
-    {
-        currentBuildingId = null;
-
-        if (missionPanel != null)
-            missionPanel.SetActive(false);
-
-        ClearMissionUI();
     }
 }

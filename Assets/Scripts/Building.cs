@@ -1,16 +1,41 @@
 using UnityEngine;
+using TMPro;
 
 public class Building : MonoBehaviour
 {
     public string buildingId;
+
     private MissionManager missionManager;
 
-    public void Setup(string id, Sprite sprite, MissionManager manager)
+    public SpriteRenderer spriteRenderer;
+    public TMP_Text nameText;
+    public TMP_Text levelText;
+
+    public void Setup(
+        string id,
+        string buildingName,
+        int level,
+        Sprite sprite,
+        MissionManager manager
+    )
     {
         buildingId = id;
         missionManager = manager;
 
-        GetComponent<SpriteRenderer>().sprite = sprite;
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = sprite;
+        }
+
+        if (nameText != null)
+        {
+            nameText.text = buildingName;
+        }
+
+        if (levelText != null)
+        {
+            levelText.text = "Lv." + level;
+        }
 
         Debug.Log("Building setup complete: " + buildingId);
     }

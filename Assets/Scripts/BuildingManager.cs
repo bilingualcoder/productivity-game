@@ -6,7 +6,7 @@ public class BuildingManager : MonoBehaviour
     public GameObject buildingPrefab;
     public MissionManager missionManager;
 
-    public BuildingSpriteSet[] buildingSpriteSets;
+    public BuildingTypeData[] buildingTypes;
 
     private List<BuildingData> buildings = new List<BuildingData>();
     private Dictionary<string, Building> spawnedBuildings = new Dictionary<string, Building>();
@@ -19,16 +19,15 @@ public class BuildingManager : MonoBehaviour
 
         if (buildings.Count == 0)
         {
-            CreateBuilding("Gym", 0, new Vector2(-3, 0));
-            CreateBuilding("Study", 1, new Vector2(0, 0));
-            CreateBuilding("Home", 2, new Vector2(3, 0));
+            CreateBuilding(0, new Vector2(-3, 0)); // Gym
+            CreateBuilding(1, new Vector2(0, 0));  // Study
+            CreateBuilding(2, new Vector2(3, 0));  // Home
         }
     }
 
-    public void CreateBuilding(string name, int buildingTypeId, Vector2 position)
+    public void CreateBuilding(int buildingTypeId, Vector2 position)
     {
         BuildingData data = new BuildingData(
-            name,
             buildingTypeId,
             position.x,
             position.y
@@ -44,12 +43,6 @@ public class BuildingManager : MonoBehaviour
         GameObject obj = Instantiate(buildingPrefab);
         obj.transform.position = new Vector3(data.x, data.y, 0);
 
-        Debug.Log(
-            "Spawn building: " + data.name +
-            " / TypeId: " + data.buildingTypeId +
-            " / Level: " + data.level
-        );
-
         Building building = obj.GetComponent<Building>();
 
         if (building == null)
@@ -58,57 +51,78 @@ public class BuildingManager : MonoBehaviour
             return;
         }
 
-        Sprite sprite = GetSpriteForBuilding(data.buildingTypeId, data.level);
+        BuildingTypeData typeData = GetBuildingTypeData(data.buildingTypeId);
+
+        if (typeData == null)
+        {
+            Debug.LogError("BuildingTypeData not found. TypeId: " + data.buildingTypeId);
+            return;
+        }
+
+        Sprite sprite = typeData.GetSpriteForLevel(data.level);
 
         building.Setup(
             data.id,
-            data.name,
+            typeData.buildingName,
             data.level,
             sprite,
             missionManager
         );
 
         spawnedBuildings[data.id] = building;
-    }
 
-    private Sprite GetSpriteForBuilding(int buildingTypeId, int level)
-    {
-        if (buildingSpriteSets == null || buildingSpriteSets.Length == 0)
-        {
-            Debug.LogWarning("Building Sprite Sets is empty.");
-            return null;
-        }
-
-        BuildingSpriteSet spriteSet = null;
-
-        foreach (BuildingSpriteSet set in buildingSpriteSets)
-        {
-            if (set.buildingTypeId == buildingTypeId)
-            {
-                spriteSet = set;
-                break;
-            }
-        }
-
-        if (spriteSet == null)
-        {
-            Debug.LogWarning("No sprite set found for buildingTypeId: " + buildingTypeId);
-            return null;
-        }
-
-        if (spriteSet.levelSprites == null || spriteSet.levelSprites.Length == 0)
-        {
-            Debug.LogWarning("No level sprites found for buildingTypeId: " + buildingTypeId);
-            return null;
-        }
-
-        int index = Mathf.Clamp(level - 1, 0, spriteSet.levelSprites.Length - 1);
-        return spriteSet.levelSprites[index];
+        Debug.Log(
+            "Spawn building: " +
+            typeData.buildingName +
+            " / TypeId: " + data.buildingTypeId +
+            " / Level: " + data.level
+        );
     }
 
     public BuildingData GetBuildingData(string buildingId)
     {
         return buildings.Find(b => b.id == buildingId);
+    }
+
+    public BuildingTypeData GetBuildingTypeData(int buildingTypeId)
+    {
+        foreach (BuildingTypeData typeData in buildingTypes)
+        {
+            if (typeData != null && typeData.buildingTypeId == buildingTypeId)
+            {
+                return typeData;
+            }
+        }
+
+        return null;
+    }
+
+    public string GetBuildingName(string buildingId)
+    {
+        BuildingData building = GetBuildingData(buildingId);
+
+        if (building == null)
+            return "Unknown Building";
+
+        BuildingTypeData typeData = GetBuildingTypeData(building.buildingTypeId);
+
+        if (typeData == null)
+            return "Unknown Building";
+
+        return typeData.buildingName;
+    }
+
+    public int GetXPToNextLevel(BuildingData building)
+    {
+        if (building == null)
+            return 0;
+
+        BuildingTypeData typeData = GetBuildingTypeData(building.buildingTypeId);
+
+        if (typeData == null)
+            return 0;
+
+        return typeData.GetXPToNextLevel(building.level);
     }
 
     public bool AddXPToBuilding(string buildingId, int xpAmount)
@@ -121,21 +135,40 @@ public class BuildingManager : MonoBehaviour
             return false;
         }
 
+        BuildingTypeData typeData = GetBuildingTypeData(building.buildingTypeId);
+
+        if (typeData == null)
+        {
+            Debug.LogWarning("BuildingTypeData not found: " + building.buildingTypeId);
+            return false;
+        }
+
         bool leveledUp = false;
 
         building.currentXP += xpAmount;
 
-        while (building.currentXP >= building.xpToNextLevel)
+        while (building.level < typeData.maxLevel &&
+               building.currentXP >= typeData.GetXPToNextLevel(building.level))
         {
-            building.currentXP -= building.xpToNextLevel;
+            building.currentXP -= typeData.GetXPToNextLevel(building.level);
             building.level++;
-            building.xpToNextLevel += 50;
             leveledUp = true;
 
-            Debug.Log(building.name + " leveled up to Lv." + building.level);
+            Debug.Log(typeData.buildingName + " leveled up to Lv." + building.level);
+        }
+
+        if (building.level >= typeData.maxLevel)
+        {
+            building.currentXP = 0;
         }
 
         RefreshBuildingVisual(building);
+
+        //if (leveledUp && spawnedBuildings.ContainsKey(building.id))
+        //{
+        //    spawnedBuildings[building.id].PlayLevelUpEffect();
+        //}
+
         SaveBuildings();
 
         return leveledUp;
@@ -150,12 +183,16 @@ public class BuildingManager : MonoBehaviour
         }
 
         Building building = spawnedBuildings[data.id];
+        BuildingTypeData typeData = GetBuildingTypeData(data.buildingTypeId);
 
-        Sprite sprite = GetSpriteForBuilding(data.buildingTypeId, data.level);
+        if (typeData == null)
+            return;
+
+        Sprite sprite = typeData.GetSpriteForLevel(data.level);
 
         building.Setup(
             data.id,
-            data.name,
+            typeData.buildingName,
             data.level,
             sprite,
             missionManager

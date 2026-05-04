@@ -107,8 +107,17 @@ public class MissionManager : MonoBehaviour
                 if (leveledUp)
                 {
                     BuildingData building = buildingManager.GetBuildingData(mission.buildingId);
-                    levelUpMessageText.text =
-                        building.name + " leveled up to Lv." + building.level + "!";
+
+                    if (building != null)
+                    {
+                        BuildingTypeData typeData = buildingManager.GetBuildingTypeData(building.buildingTypeId);
+
+                        if (typeData != null)
+                        {
+                            levelUpMessageText.text =
+                                typeData.buildingName + " leveled up to Lv." + building.level + "!";
+                        }
+                    }
                 }
                 else
                 {
@@ -195,15 +204,37 @@ public class MissionManager : MonoBehaviour
             return;
         }
 
+        BuildingTypeData typeData = buildingManager.GetBuildingTypeData(building.buildingTypeId);
+
+        if (typeData == null)
+        {
+            if (buildingNameLevelText != null)
+                buildingNameLevelText.text = "Unknown Building Type";
+
+            if (buildingXPText != null)
+                buildingXPText.text = "";
+
+            return;
+        }
+
         if (buildingNameLevelText != null)
         {
-            buildingNameLevelText.text = building.name + " Lv." + building.level;
+            buildingNameLevelText.text = typeData.buildingName + " Lv." + building.level;
         }
 
         if (buildingXPText != null)
         {
-            buildingXPText.text =
-                "Building XP: " + building.currentXP + " / " + building.xpToNextLevel;
+            if (building.level >= typeData.maxLevel)
+            {
+                buildingXPText.text = "Building XP: MAX";
+            }
+            else
+            {
+                int xpToNextLevel = typeData.GetXPToNextLevel(building.level);
+
+                buildingXPText.text =
+                    "Building XP: " + building.currentXP + " / " + xpToNextLevel;
+            }
         }
     }
 

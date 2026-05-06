@@ -824,6 +824,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438493300}
   m_CullTransparentMesh: 1
+--- !u!1 &472695232
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 472695234}
+  - component: {fileID: 472695233}
+  m_Layer: 0
+  m_Name: ResetSaveData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &472695233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472695232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11e211a11aa11a54ab8d506f1c0cb2a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResetSaveData
+--- !u!4 &472695234
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472695232}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &640145151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1641,22 +1685,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingManager
   buildingPrefab: {fileID: 4300249492846494642, guid: 8cc7e36927355b94a84fa35aec44fd0c, type: 3}
   missionManager: {fileID: 1417398947}
-  buildingSpriteSets:
-  - buildingTypeId: 0
-    levelSprites:
-    - {fileID: 3467787228431498309, guid: 1efe7cfacc718e445959316639bc4f72, type: 3}
-    - {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-    - {fileID: 3467787228431498309, guid: 1efe7cfacc718e445959316639bc4f72, type: 3}
-  - buildingTypeId: 1
-    levelSprites:
-    - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-    - {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-    - {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  - buildingTypeId: 2
-    levelSprites:
-    - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-    - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
-    - {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  buildingTypes:
+  - {fileID: 11400000, guid: 54e2acd3a2eb49f44a7d940b554f7926, type: 2}
+  - {fileID: 11400000, guid: fdadddbaec26d6f4e90723bccb754409, type: 2}
+  - {fileID: 11400000, guid: cd42d710ac840224c8974575ce11de18, type: 2}
 --- !u!4 &1347908479
 Transform:
   m_ObjectHideFlags: 0
@@ -3202,3 +3234,4 @@ SceneRoots:
   - {fileID: 1146334937}
   - {fileID: 1347908479}
   - {fileID: 2112167395}
+  - {fileID: 472695234}

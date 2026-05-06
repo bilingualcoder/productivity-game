@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb087bbf97c62964ea557af1545de929, type: 3}
   m_Name: StudyBuildingType
   m_EditorClassIdentifier: Assembly-CSharp::BuildingTypeData
-  buildingTypeId: 0
-  buildingName: 
-  levelSprites: []
+  buildingTypeId: 1
+  buildingName: Study
+  levelSprites:
+  - {fileID: 3467787228431498309, guid: 1efe7cfacc718e445959316639bc4f72, type: 3}
+  - {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   maxLevel: 3
   baseXPToNextLevel: 100
   xpIncreasePerLevel: 50

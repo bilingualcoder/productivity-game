@@ -15,7 +15,7 @@ MonoBehaviour:
   buildingTypeId: 0
   buildingName: Gym
   levelSprites:
-  - {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2619591857597635248, guid: b7df11031aa0d98499d8ad4ab57932f4, type: 3}
   - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   maxLevel: 3

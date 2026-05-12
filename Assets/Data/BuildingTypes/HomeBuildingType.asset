@@ -15,7 +15,7 @@ MonoBehaviour:
   buildingTypeId: 2
   buildingName: Home
   levelSprites:
-  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: -7411974349392773033, guid: e6f151710bd632e4ab242da446c6df32, type: 3}
   - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   maxLevel: 3

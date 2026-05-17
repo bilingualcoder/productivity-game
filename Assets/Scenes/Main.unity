@@ -961,6 +961,7 @@ MonoBehaviour:
   playerData: {fileID: 1963643036}
   levelText: {fileID: 1827686320}
   xpText: {fileID: 1462103226}
+  buildingManager: {fileID: 1347908478}
 --- !u!4 &761431027
 Transform:
   m_ObjectHideFlags: 0
@@ -1556,8 +1557,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cd42d710ac840224c8974575ce11de18, type: 2}
   - {fileID: 11400000, guid: cd42d710ac840224c8974575ce11de18, type: 2}
   - {fileID: 11400000, guid: cd42d710ac840224c8974575ce11de18, type: 2}
-  initialLayout: {fileID: 0}
-  emptySlotPrefab: {fileID: 0}
+  initialLayout: {fileID: 11400000, guid: 3ff61ac38f80ac14d958dab085348541, type: 2}
+  emptySlotPrefab: {fileID: 8846731276174779723, guid: 5ea022ea4c84a0a41b2672d3dfd7487b, type: 3}
 --- !u!4 &1347908479
 Transform:
   m_ObjectHideFlags: 0
@@ -1652,7 +1653,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1500303715
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -4901,6 +4902,7 @@ GameObject:
   - component: {fileID: 1887147266}
   - component: {fileID: 1887147269}
   - component: {fileID: 1887147270}
+  - component: {fileID: 1887147271}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5041,6 +5043,22 @@ MonoBehaviour:
   target: {fileID: 1963643033}
   smoothSpeed: 5
   offset: {x: 0, y: 0, z: -10}
+--- !u!114 &1887147271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1887147265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.Physics2DRaycaster
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &1892967716
 GameObject:
   m_ObjectHideFlags: 0
@@ -5448,6 +5466,7 @@ GameObject:
   - component: {fileID: 1963643034}
   - component: {fileID: 1963643035}
   - component: {fileID: 1963643036}
+  - component: {fileID: 1963643037}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -5489,17 +5508,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.000000029802322, y: 0.07903963}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0}
     oldSize: {x: 0.72, y: 1.11}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.540133, y: 0.3245703}
   m_EdgeRadius: 0
 --- !u!50 &1963643031
 Rigidbody2D:
@@ -5573,8 +5592,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 887569041
-  m_SortingLayer: 4
+  m_SortingLayerID: -860892875
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7739819106527513693, guid: 0f9eb1c675ebce7428e2771b00edf34c, type: 3}
@@ -5586,7 +5605,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!4 &1963643033
 Transform:
   m_ObjectHideFlags: 0
@@ -5614,7 +5633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df43b56ca845d764c9e8c7d8c6b36ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  moveSpeed: 5
+  moveSpeed: 3
   idleDown: {fileID: 7739819106527513693, guid: 0f9eb1c675ebce7428e2771b00edf34c, type: 3}
   idleUp: {fileID: 114101211107644654, guid: 1012218fe391b9e49a0a6f7c0bd2201d, type: 3}
   idleSide: {fileID: 3186429667813872639, guid: 1ec0361738d92ad46a133f124a542913, type: 3}
@@ -5663,6 +5682,20 @@ MonoBehaviour:
   level: 1
   currentXP: 0
   xpToNextLevel: 100
+--- !u!114 &1963643037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963643029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83a9daef2a0cea048bf7e4b9ab895915, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::YSort
+  sortingOffset: 0
+  sortPointYOffset: 0
 --- !u!1 &1989903674
 GameObject:
   m_ObjectHideFlags: 0

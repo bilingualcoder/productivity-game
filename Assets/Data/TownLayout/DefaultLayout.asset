@@ -19,15 +19,21 @@ MonoBehaviour:
     position: {x: 3, y: 3}
     unlockPlayerLevel: 1
     builtAtStart: 1
+    lockedSprite: {fileID: 3467787228431498309, guid: 1efe7cfacc718e445959316639bc4f72, type: 3}
+    buildableSprite: {fileID: 7739819106527513693, guid: 0f9eb1c675ebce7428e2771b00edf34c, type: 3}
   - slotId: study_0
     label: study_start
     buildingTypeId: 1
     position: {x: -2, y: -3}
     unlockPlayerLevel: 1
-    builtAtStart: 1
+    builtAtStart: 0
+    lockedSprite: {fileID: 3467787228431498309, guid: 1efe7cfacc718e445959316639bc4f72, type: 3}
+    buildableSprite: {fileID: 7739819106527513693, guid: 0f9eb1c675ebce7428e2771b00edf34c, type: 3}
   - slotId: house_0
     label: house_start
     buildingTypeId: 2
     position: {x: 2, y: 5}
     unlockPlayerLevel: 2
     builtAtStart: 0
+    lockedSprite: {fileID: 3467787228431498309, guid: 1efe7cfacc718e445959316639bc4f72, type: 3}
+    buildableSprite: {fileID: 7739819106527513693, guid: 0f9eb1c675ebce7428e2771b00edf34c, type: 3}

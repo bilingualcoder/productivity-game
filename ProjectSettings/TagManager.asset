@@ -41,23 +41,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3031999787
+    locked: 0
   - name: Ground
     uniqueID: 2794663581
     locked: 0
-  - name: GroundDetail
+  - name: YSortObjects
     uniqueID: 3434074421
     locked: 0
-  - name: Objects
-    uniqueID: 1793437015
-    locked: 0
-  - name: Character
-    uniqueID: 887569041
-    locked: 0
-  - name: Foreground
-    uniqueID: 2210640963
+  - name: Effects
+    uniqueID: 3622609455
     locked: 0
   - name: UI
-    uniqueID: 4255081989
+    uniqueID: 887569041
     locked: 0
   m_RenderingLayers:
   - Default

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 999e685934c42084480c8cbdea905bd3, type: 3}
+  m_Name: DefaultLayout
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingLayoutData
+  buildingSlots:
+  - slotId: gym_0
+    label: gym_start
+    buildingTypeId: 0
+    position: {x: 3, y: 3}
+    unlockPlayerLevel: 1
+    builtAtStart: 1
+  - slotId: study_0
+    label: study_start
+    buildingTypeId: 1
+    position: {x: -2, y: -3}
+    unlockPlayerLevel: 1
+    builtAtStart: 1
+  - slotId: house_0
+    label: house_start
+    buildingTypeId: 2
+    position: {x: 2, y: 5}
+    unlockPlayerLevel: 2
+    builtAtStart: 0

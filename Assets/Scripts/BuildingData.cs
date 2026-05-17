@@ -5,6 +5,8 @@ public class BuildingData
 {
     public string id;
 
+    public string slotId;
+
     public int buildingTypeId;
 
     public float x;
@@ -13,9 +15,10 @@ public class BuildingData
     public int level;
     public int currentXP;
 
-    public BuildingData(int buildingTypeId, float x, float y)
+    public BuildingData(string slotId, int buildingTypeId, float x, float y)
     {
         id = Guid.NewGuid().ToString();
+        this.slotId = slotId;
 
         this.buildingTypeId = buildingTypeId;
 
